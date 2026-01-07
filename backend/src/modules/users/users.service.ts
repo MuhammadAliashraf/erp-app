@@ -11,11 +11,20 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: any): Promise<User> {
-    const user = this.usersRepository.create(createUserDto);
+    const user = this.usersRepository.create(createUserDto as Partial<User>);
     return this.usersRepository.save(user);
   }
 
   async findOne(username: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { username } });
+  }
+
+  async findOneWithPassword(username: string): Promise<User | null> {
+    return this.usersRepository.findOne({ 
+      where: { username },
+      select: ['id', 'username', 'password', 'role', 'name'] // Explicitly select password
+      // Alternatively use query builder to addSelect, but simple select works if we list all needed fields.
+      // Better: use addSelect if we want all + password.
+    });
   }
 }
