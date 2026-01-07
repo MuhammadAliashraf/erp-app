@@ -11,7 +11,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: any): Promise<User> {
-    const user = this.usersRepository.create(createUserDto as Partial<User>);
+    const user = this.usersRepository.create(createUserDto);
     return this.usersRepository.save(user);
   }
 
