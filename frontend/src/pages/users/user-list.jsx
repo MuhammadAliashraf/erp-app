@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2, Search, User, Download } from 'lucide-react';
-import userService from '@/services/userService';
+import userService from '@/services/user-service';
 import Modal from '@/components/ui/modal';
-import UserForm from '@/components/users/UserForm';
+import UserForm from '@/components/users/user-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';

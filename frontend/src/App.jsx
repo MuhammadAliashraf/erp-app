@@ -4,8 +4,8 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import Dashboard from './pages/dashboard';
-import AdminLayout from './components/layout/AdminLayout';
-import UserList from './pages/users/UserList';
+import AdminLayout from './components/layout/admin-layout';
+import UserList from './pages/users/user-list';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
