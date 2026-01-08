@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -11,13 +11,24 @@ import {
   Package,
   CheckCircle2,
   Clock,
-  AlertOctagon
+  AlertOctagon,
+  FileText
 } from 'lucide-react';
 import purchaseOrderService from '@/services/purchase-order-service';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 import Modal from '@/components/ui/modal';
 import PurchaseOrderForm from '@/components/purchase-orders/purchase-order-form';
+import { Badge } from "@/components/ui/badge"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const PurchaseOrderDetail = () => {
   const { id } = useParams();
@@ -26,7 +37,7 @@ const PurchaseOrderDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await purchaseOrderService.getPurchaseOrder(id);
@@ -37,11 +48,11 @@ const PurchaseOrderDetail = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchOrder();
-  }, [id]);
+  }, [fetchOrder]);
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this purchase order? This action cannot be undone.')) {
@@ -90,10 +101,10 @@ const PurchaseOrderDetail = () => {
 
   const getStatusBadge = (status) => {
     const styles = {
-      'Received': 'bg-green-100 text-green-700 border-green-200',
-      'Pending': 'bg-yellow-100 text-yellow-700 border-yellow-200',
-      'Draft': 'bg-gray-100 text-gray-700 border-gray-200',
-      'Cancelled': 'bg-red-100 text-red-700 border-red-200',
+      'Received': 'bg-green-100 text-green-700 border-green-200 hover:bg-green-100',
+      'Pending': 'bg-yellow-100 text-yellow-700 border-yellow-200 hover:bg-yellow-100',
+      'Draft': 'bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-100',
+      'Cancelled': 'bg-red-100 text-red-700 border-red-200 hover:bg-red-100',
     };
     
     const icons = {
@@ -103,18 +114,13 @@ const PurchaseOrderDetail = () => {
       'Cancelled': <AlertOctagon className="w-3.5 h-3.5 mr-1" />,
     };
 
-    // Helper for icons if needed locally, for now simple text
     return (
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${styles[status] || styles['Draft']}`}>
+        <Badge variant="outline" className={`pl-2 pr-3 py-1 rounded-full text-sm font-medium border ${styles[status] || styles['Draft']}`}>
         {icons[status]}
         {status}
-        </span>
+        </Badge>
     );
   };
-  
-  // Dummy definition for FileText since it's used in styles above but not imported yet 
-  // (Adding it to imports list now)
-  const FileText = ({ className }) => <span className={className}>📄</span>;
 
 
   return (
@@ -172,19 +178,19 @@ const PurchaseOrderDetail = () => {
                 
                 <CardContent className="p-0">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                            <thead className="bg-gray-50 border-b border-gray-100 text-gray-500 font-medium uppercase text-xs tracking-wider text-left">
-                                <tr>
-                                    <th className="px-6 py-4">Item Details</th>
-                                    <th className="px-6 py-4 text-center">Qty</th>
-                                    <th className="px-6 py-4 text-right">Unit Price</th>
-                                    <th className="px-6 py-4 text-right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-50">
+                        <Table>
+                            <TableHeader className="bg-gray-50 border-b border-gray-100">
+                                <TableRow>
+                                    <TableHead className="w-[40%]">Item Details</TableHead>
+                                    <TableHead className="text-center">Qty</TableHead>
+                                    <TableHead className="text-right">Unit Price</TableHead>
+                                    <TableHead className="text-right">Total</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
                                 {order.items.map((item, index) => (
-                                    <tr key={item.id || index} className="group hover:bg-indigo-50/10">
-                                        <td className="px-6 py-4">
+                                    <TableRow key={item.id || index} className="group hover:bg-slate-50/50">
+                                        <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-400">
                                                     <Package className="w-4 h-4" />
@@ -194,30 +200,30 @@ const PurchaseOrderDetail = () => {
                                                     <p className="text-xs text-gray-500">{item.product?.sku}</p>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-center text-gray-600 font-medium">
+                                        </TableCell>
+                                        <TableCell className="text-center text-gray-600 font-medium">
                                             {item.quantity}
-                                        </td>
-                                        <td className="px-6 py-4 text-right text-gray-600">
+                                        </TableCell>
+                                        <TableCell className="text-right text-gray-600">
                                             ${Number(item.unitPrice).toFixed(2)}
-                                        </td>
-                                        <td className="px-6 py-4 text-right font-medium text-gray-900">
+                                        </TableCell>
+                                        <TableCell className="text-right font-medium text-gray-900">
                                             ${Number(item.totalPrice).toFixed(2)}
-                                        </td>
-                                    </tr>
+                                        </TableCell>
+                                    </TableRow>
                                 ))}
-                            </tbody>
-                            <tfoot className="bg-gray-50/50">
-                                <tr>
-                                    <td colSpan="3" className="px-6 py-4 text-right text-gray-500 font-medium">Subtotal</td>
-                                    <td className="px-6 py-4 text-right text-gray-900 font-medium">${Number(order.totalAmount).toFixed(2)}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="3" className="px-6 py-4 text-right text-gray-900 font-bold text-lg">Total Amount</td>
-                                    <td className="px-6 py-4 text-right text-indigo-600 font-bold text-lg">${Number(order.totalAmount).toFixed(2)}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                            </TableBody>
+                            <TableFooter className="bg-gray-50/50">
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-right text-gray-500 font-medium">Subtotal</TableCell>
+                                    <TableCell className="text-right text-gray-900 font-medium">${Number(order.totalAmount).toFixed(2)}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-right text-gray-900 font-bold text-lg">Total Amount</TableCell>
+                                    <TableCell className="text-right text-indigo-600 font-bold text-lg">${Number(order.totalAmount).toFixed(2)}</TableCell>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
                     </div>
                 </CardContent>
             </Card>

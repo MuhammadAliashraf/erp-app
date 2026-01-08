@@ -6,6 +6,15 @@ import PurchaseOrderForm from '@/components/purchase-orders/purchase-order-form'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 const PurchaseOrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -98,66 +107,66 @@ const PurchaseOrderList = () => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/50 text-xs uppercase text-gray-500 font-semibold tracking-wider">
-                <tr>
-                  <th className="px-6 py-4">PO Number</th>
-                  <th className="px-6 py-4">Supplier</th>
-                  <th className="px-6 py-4">Date</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Total</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+            <Table>
+              <TableHeader className="bg-gray-50/50">
+                <TableRow>
+                  <TableHead className="w-[100px] text-xs uppercase font-semibold">PO Number</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Supplier</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Date</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Status</TableHead>
+                  <TableHead className="text-right text-xs uppercase font-semibold">Total</TableHead>
+                  <TableHead className="text-right text-xs uppercase font-semibold">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {isLoading ? (
-                  <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                              <p>Loading orders...</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : filteredOrders.length === 0 ? (
-                    <tr>
-                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                    <TableRow>
+                    <TableCell colSpan={6} className="h-32 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <FileText className="h-12 w-12 text-gray-300" />
                              <p className="text-lg font-medium text-gray-900">No purchase orders found</p>
                              <p className="text-sm">Create a new order to restock inventory.</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredOrders.map((order) => (
-                    <tr key={order.id} className="group hover:bg-indigo-50/30 transition-colors duration-200">
-                      <td className="px-6 py-4 font-medium text-gray-900">
+                    <TableRow key={order.id} className="group hover:bg-slate-50/50">
+                      <TableCell className="font-medium text-gray-900">
                         {order.orderNumber}
-                      </td>
-                      <td className="px-6 py-4">
+                      </TableCell>
+                      <TableCell>
                          <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-xs">
                                 {order.supplier?.name?.charAt(0)}
                             </div>
                             {order.supplier?.name || 'Unknown Supplier'}
                          </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-500">
+                      </TableCell>
+                      <TableCell className="text-gray-500">
                         <div className="flex items-center gap-2">
                             <Calendar className="w-3 h-3" />
                             {new Date(order.orderDate).toLocaleDateString()}
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(order.status)}`}>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={`rounded-full ${getStatusColor(order.status)} border-0 px-2.5 py-0.5`}>
                           {order.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-right font-semibold text-gray-900">
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right font-semibold text-gray-900">
                         ${Number(order.totalAmount).toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4 text-right">
+                      </TableCell>
+                      <TableCell className="text-right">
                         <Button 
                             variant="ghost" 
                             size="icon" 
@@ -167,12 +176,12 @@ const PurchaseOrderList = () => {
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

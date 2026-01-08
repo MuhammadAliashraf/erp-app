@@ -6,6 +6,14 @@ import SupplierForm from '@/components/suppliers/supplier-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const SupplierList = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -126,51 +134,51 @@ const SupplierList = () => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/50 text-xs uppercase text-gray-500 font-semibold tracking-wider">
-                <tr>
-                  <th className="px-6 py-4">Company</th>
-                  <th className="px-6 py-4">Contact Person</th>
-                  <th className="px-6 py-4">Contact Info</th>
-                  <th className="px-6 py-4">Tax ID / VAT</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+            <Table>
+              <TableHeader className="bg-gray-50/50">
+                <TableRow>
+                  <TableHead className="text-xs uppercase font-semibold">Company</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Contact Person</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Contact Info</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Tax ID / VAT</TableHead>
+                  <TableHead className="text-right text-xs uppercase font-semibold">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {isLoading ? (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                              <p>Loading suppliers...</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : filteredSuppliers.length === 0 ? (
-                    <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <TableRow>
+                    <TableCell colSpan={5} className="h-32 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <Truck className="h-12 w-12 text-gray-300" />
                              <p className="text-lg font-medium text-gray-900">No suppliers found</p>
                              <p className="text-sm">Add a supplier to start tracking purchases.</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredSuppliers.map((supplier) => (
-                    <tr key={supplier.id} className="group hover:bg-indigo-50/30 transition-colors duration-200">
-                      <td className="px-6 py-4">
+                    <TableRow key={supplier.id} className="group hover:bg-slate-50/50">
+                      <TableCell>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500 border border-orange-100">
                             <Truck className="w-5 h-5" />
                           </div>
                           <div className="font-semibold text-gray-900">{supplier.name}</div>
                         </div>
-                      </td>
-                       <td className="px-6 py-4 text-gray-700">
+                      </TableCell>
+                      <TableCell className="text-gray-700">
                         {supplier.contactPerson || '-'}
-                      </td>
-                      <td className="px-6 py-4">
+                      </TableCell>
+                      <TableCell>
                         <div className="flex flex-col gap-1 text-xs text-gray-500">
                             {supplier.email && (
                                 <div className="flex items-center gap-2">
@@ -184,11 +192,11 @@ const SupplierList = () => {
                             )}
                             {!supplier.email && !supplier.phone && '-'}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-gray-500 font-mono text-xs">
+                      </TableCell>
+                      <TableCell className="text-gray-500 font-mono text-xs">
                         {supplier.taxId || '-'}
-                      </td>
-                      <td className="px-6 py-4 text-right">
+                      </TableCell>
+                      <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           <Button 
                             variant="ghost" 
@@ -209,12 +217,12 @@ const SupplierList = () => {
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

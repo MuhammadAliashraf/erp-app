@@ -6,6 +6,15 @@ import UserForm from '@/components/users/user-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -125,40 +134,40 @@ const UserList = () => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/50 text-xs uppercase text-gray-500 font-semibold tracking-wider">
-                <tr>
-                  <th className="px-6 py-4">User Details</th>
-                  <th className="px-6 py-4">Role & Permissions</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Joined Date</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+            <Table>
+              <TableHeader className="bg-gray-50/50">
+                <TableRow>
+                  <TableHead className="text-xs uppercase font-semibold">User Details</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Role & Permissions</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Status</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Joined Date</TableHead>
+                  <TableHead className="text-right text-xs uppercase font-semibold">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {isLoading ? (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                              <p>Loading users...</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : filteredUsers.length === 0 ? (
-                    <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <TableRow>
+                    <TableCell colSpan={5} className="h-32 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <User className="h-12 w-12 text-gray-300" />
                              <p className="text-lg font-medium text-gray-900">No users found</p>
                              <p className="text-sm">Try adjusting your search or add a new user.</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="group hover:bg-indigo-50/30 transition-colors duration-200">
-                      <td className="px-6 py-4">
+                    <TableRow key={user.id} className="group hover:bg-slate-50/50">
+                      <TableCell>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md transform group-hover:scale-110 transition-transform duration-300">
                             {user.name?.[0]?.toUpperCase() || <User className="w-5 h-5" />}
@@ -168,31 +177,31 @@ const UserList = () => {
                             <div className="text-xs text-gray-500 font-medium">@{user.username}</div>
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={`rounded-full px-3 py-1 font-semibold
                           ${user.role === 'admin' 
-                            ? 'bg-purple-100 text-purple-700 border border-purple-200' 
+                            ? 'bg-purple-100 text-purple-700 border-purple-200' 
                             : user.role === 'manager'
-                            ? 'bg-blue-100 text-blue-700 border border-blue-200' 
-                            : 'bg-emerald-100 text-emerald-700 border border-emerald-200'}`}>
+                            ? 'bg-blue-100 text-blue-700 border-blue-200' 
+                            : 'bg-emerald-100 text-emerald-700 border-emerald-200'}`}>
                           {user.role}
-                        </span>
-                      </td>
-                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                        </Badge>
+                      </TableCell>
+                       <TableCell>
+                        <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-100 gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                             Active
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-gray-500 font-medium">
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-gray-500 font-medium">
                         {new Date(user.createdAt).toLocaleDateString(undefined, {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric'
                         })}
-                      </td>
-                      <td className="px-6 py-4 text-right">
+                      </TableCell>
+                      <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           <Button 
                             variant="ghost" 
@@ -213,12 +222,12 @@ const UserList = () => {
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

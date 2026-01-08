@@ -1,10 +1,17 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const userSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -14,7 +21,7 @@ const userSchema = z.object({
 });
 
 const UserForm = ({ user, onSubmit, isLoading }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: '',
@@ -89,15 +96,22 @@ const UserForm = ({ user, onSubmit, isLoading }) => {
 
       <div className="space-y-2">
         <Label htmlFor="role">Role</Label>
-        <select
-          id="role"
-          {...register('role')}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <option value="user">User</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
+        <Controller
+          control={control}
+          name="role"
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value} defaultValue="user">
+              <SelectTrigger>
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="user">User</SelectItem>
+                <SelectItem value="manager">Manager</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.role && <p className="text-xs text-red-500">{errors.role.message}</p>}
       </div>
 

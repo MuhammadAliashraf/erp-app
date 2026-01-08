@@ -5,6 +5,7 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from "@/components/ui/textarea"
 
 const categorySchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -49,10 +50,11 @@ const CategoryForm = ({ category, onSubmit, isLoading }) => {
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Input 
+        <Textarea 
           id="description" 
           placeholder="Category details..." 
           {...register('description')} 
+          className="bg-white"
         />
       </div>
 

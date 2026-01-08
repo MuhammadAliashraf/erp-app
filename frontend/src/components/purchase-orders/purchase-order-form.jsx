@@ -5,6 +5,14 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { Trash2, Plus, Calendar } from 'lucide-react';
 import supplierService from '@/services/supplier-service';
 import productService from '@/services/product-service';
@@ -93,46 +101,59 @@ const PurchaseOrderForm = ({ order, onSubmit, isLoading }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="supplierId">Supplier</Label>
-            <select
-              id="supplierId"
-              {...register('supplierId')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="">Select Supplier</option>
-              {suppliers.map(s => (
-                <option key={s.id} value={s.id}>{s.name}</option>
-              ))}
-            </select>
+            <Controller
+              control={control}
+              name="supplierId"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value ? String(field.value) : undefined}>
+                  <SelectTrigger className="bg-white">
+                    <SelectValue placeholder="Select Supplier" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {suppliers.map(s => (
+                      <SelectItem key={s.id} value={String(s.id)}>{s.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
             {errors.supplierId && <p className="text-xs text-red-500">{errors.supplierId.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="orderDate">Order Date</Label>
             <div className="relative">
-                <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                <Input type="date" id="orderDate" {...register('orderDate')} className="pl-10" />
+                <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 z-10" />
+                <Input type="date" id="orderDate" {...register('orderDate')} className="pl-10 bg-white" />
             </div>
             {errors.orderDate && <p className="text-xs text-red-500">{errors.orderDate.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <select
-              id="status"
-              {...register('status')}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <option value="Draft">Draft</option>
-              <option value="Pending">Pending</option>
-              <option value="Received">Received</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
+            <Controller
+              control={control}
+              name="status"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value} defaultValue="Pending">
+                  <SelectTrigger className="bg-white">
+                    <SelectValue placeholder="Select Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Draft">Draft</SelectItem>
+                    <SelectItem value="Pending">Pending</SelectItem>
+                    <SelectItem value="Received">Received</SelectItem>
+                    <SelectItem value="Cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
         </div>
         
         <div className="mt-4 space-y-2">
            <Label htmlFor="notes">Notes</Label>
-           <Input id="notes" placeholder="Optional notes for this order" {...register('notes')} />
+           <Textarea id="notes" placeholder="Optional notes for this order" {...register('notes')} className="bg-white" />
         </div>
       </div>
 
@@ -145,19 +166,28 @@ const PurchaseOrderForm = ({ order, onSubmit, isLoading }) => {
           <div key={field.id} className="grid grid-cols-12 gap-3 items-end p-4 bg-white border rounded-lg shadow-sm hover:border-indigo-200 transition-colors">
             <div className="col-span-5 space-y-2">
               <Label className="text-xs">Product</Label>
-              <select
-                {...register(`items.${index}.productId`)}
-                onChange={(e) => {
-                    register(`items.${index}.productId`).onChange(e);
-                    handleProductChange(index, e.target.value);
-                }}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Select Product</option>
-                {products.map(p => (
-                  <option key={p.id} value={p.id}>{p.name} (Stock: {p.stockQuantity})</option>
-                ))}
-              </select>
+              <Controller
+                control={control}
+                name={`items.${index}.productId`}
+                render={({ field: renderField }) => (
+                  <Select 
+                    onValueChange={(val) => {
+                      renderField.onChange(val);
+                      handleProductChange(index, val);
+                    }} 
+                    value={renderField.value ? String(renderField.value) : undefined}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Product" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {products.map(p => (
+                        <SelectItem key={p.id} value={String(p.id)}>{p.name} (Stock: {p.stockQuantity})</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.items?.[index]?.productId && <p className="text-xs text-red-500">{errors.items[index].productId.message}</p>}
             </div>
 

@@ -5,6 +5,7 @@ import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from "@/components/ui/textarea"
 
 const supplierSchema = z.object({
   name: z.string().min(2, 'Company Name is required'),
@@ -89,10 +90,11 @@ const SupplierForm = ({ supplier, onSubmit, isLoading }) => {
 
       <div className="space-y-2">
         <Label htmlFor="address">Address</Label>
-        <Input 
+        <Textarea 
           id="address" 
           placeholder="123 Business St, City" 
           {...register('address')} 
+          className="bg-white"
         />
       </div>
 

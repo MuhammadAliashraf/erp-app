@@ -6,6 +6,15 @@ import ProductForm from '@/components/products/product-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Badge } from "@/components/ui/badge"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -126,40 +135,40 @@ const ProductList = () => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50/50 text-xs uppercase text-gray-500 font-semibold tracking-wider">
-                <tr>
-                  <th className="px-6 py-4">Product Info</th>
-                  <th className="px-6 py-4">Category</th>
-                  <th className="px-6 py-4">Price</th>
-                  <th className="px-6 py-4">Stock Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
+            <Table>
+              <TableHeader className="bg-gray-50/50">
+                <TableRow>
+                  <TableHead className="text-xs uppercase font-semibold">Product Info</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Category</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Price</TableHead>
+                  <TableHead className="text-xs uppercase font-semibold">Stock Status</TableHead>
+                  <TableHead className="text-right text-xs uppercase font-semibold">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {isLoading ? (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
                              <p>Loading inventory...</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : filteredProducts.length === 0 ? (
-                    <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                    <TableRow>
+                    <TableCell colSpan={5} className="h-32 text-center text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                              <Package className="h-12 w-12 text-gray-300" />
                              <p className="text-lg font-medium text-gray-900">No products found</p>
                              <p className="text-sm">Add new products to get started.</p>
                         </div>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   filteredProducts.map((product) => (
-                    <tr key={product.id} className="group hover:bg-indigo-50/30 transition-colors duration-200">
-                      <td className="px-6 py-4">
+                    <TableRow key={product.id} className="group hover:bg-slate-50/50">
+                      <TableCell>
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 border border-gray-200">
                             <Package className="w-5 h-5" />
@@ -169,16 +178,16 @@ const ProductList = () => {
                             <div className="text-xs text-gray-500 font-mono">SKU: {product.sku}</div>
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200">
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="bg-gray-100 text-gray-800 border-gray-200">
                           {product.category}
-                        </span>
-                      </td>
-                       <td className="px-6 py-4 font-medium text-gray-900">
+                        </Badge>
+                      </TableCell>
+                       <TableCell className="font-medium text-gray-900">
                         ${Number(product.price).toFixed(2)}
-                      </td>
-                      <td className="px-6 py-4">
+                      </TableCell>
+                      <TableCell>
                         <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-2">
                                 <span className={`text-sm font-semibold ${product.stockQuantity <= product.minStockLevel ? 'text-red-600' : 'text-gray-900'}`}>
@@ -195,8 +204,8 @@ const ProductList = () => {
                                 />
                             </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
+                      </TableCell>
+                      <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           <Button 
                             variant="ghost" 
@@ -217,12 +226,12 @@ const ProductList = () => {
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))
                 )}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

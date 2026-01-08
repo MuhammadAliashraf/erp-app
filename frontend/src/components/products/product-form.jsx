@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import categoryService from '@/services/category-service';
 
 const productSchema = z.object({
@@ -20,7 +28,7 @@ const productSchema = z.object({
 
 const ProductForm = ({ product, onSubmit, isLoading }) => {
   const [categories, setCategories] = useState([]);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: '',
@@ -90,37 +98,50 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-             <select
-                id="category"
-                {...register('category')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="">Select Category</option>
-                {categories.length > 0 ? (
-                  categories.map((cat) => (
-                    <option key={cat.id} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="" disabled>No categories found</option>
+             <Controller
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.length > 0 ? (
+                        categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.name}>
+                            {cat.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="none" disabled>No categories found</SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
                 )}
-              </select>
+              />
              {errors.category && <p className="text-xs text-red-500">{errors.category.message}</p>}
         </div>
          <div className="space-y-2">
             <Label htmlFor="unit">Unit</Label>
-             <select
-                id="unit"
-                {...register('unit')}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="pcs">Pieces (pcs)</option>
-                <option value="kg">Kilogram (kg)</option>
-                <option value="box">Box</option>
-                <option value="ltr">Liter (ltr)</option>
-                <option value="m">Meter (m)</option>
-              </select>
+             <Controller
+                control={control}
+                name="unit"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value} defaultValue="pcs">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pcs">Pieces (pcs)</SelectItem>
+                      <SelectItem value="kg">Kilogram (kg)</SelectItem>
+                      <SelectItem value="box">Box</SelectItem>
+                      <SelectItem value="ltr">Liter (ltr)</SelectItem>
+                      <SelectItem value="m">Meter (m)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
         </div>
       </div>
 
@@ -143,7 +164,7 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
       
        <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Input id="description" placeholder="Product details..." {...register('description')} />
+            <Textarea id="description" placeholder="Product details..." {...register('description')} className="bg-white" />
         </div>
 
       <div className="flex justify-end pt-4">
