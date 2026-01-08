@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import categoryService from '@/services/category-service';
 
 const productSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   sku: z.string().min(3, 'SKU must be at least 3 characters'),
-  category: z.string().min(2, 'Category is required'),
+  category: z.string().min(1, 'Category is required'),
   price: z.coerce.number().min(0.01, 'Price must be greater than 0'),
   stockQuantity: z.coerce.number().min(0, 'Stock cannot be negative'),
   minStockLevel: z.coerce.number().min(0, 'Min stock cannot be negative'),
@@ -18,6 +19,7 @@ const productSchema = z.object({
 });
 
 const ProductForm = ({ product, onSubmit, isLoading }) => {
+  const [categories, setCategories] = useState([]);
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
@@ -31,6 +33,18 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
       description: '',
     },
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await categoryService.getAllCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to load categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (product) {
@@ -76,7 +90,22 @@ const ProductForm = ({ product, onSubmit, isLoading }) => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Input id="category" placeholder="e.g. Electronics" {...register('category')} className={errors.category ? 'border-red-500' : ''} />
+             <select
+                id="category"
+                {...register('category')}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="">Select Category</option>
+                {categories.length > 0 ? (
+                  categories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>No categories found</option>
+                )}
+              </select>
              {errors.category && <p className="text-xs text-red-500">{errors.category.message}</p>}
         </div>
          <div className="space-y-2">
