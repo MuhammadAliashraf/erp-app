@@ -4,6 +4,8 @@ import { AuthProvider, useAuth } from './hooks/useAuth';
 import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import Dashboard from './pages/dashboard';
+import AdminLayout from './components/layout/AdminLayout';
+import UserList from './pages/users/UserList';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -21,14 +23,17 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
           <Route 
-            path="/" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <AdminLayout />
               </ProtectedRoute>
             } 
-          />
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<UserList />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>

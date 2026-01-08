@@ -1,18 +1,33 @@
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // Registration is handled in AuthController usually, but can be here too.
-  // We'll keep it simple and allow creating users here or via Auth.
-  
   @Post()
   create(@Body() createUserDto: any) {
-    // This is a raw create, should ideally hash password here or in service.
-    // For now, let AuthService handle registration logic which uses UsersService.
-    // So this might be admin only or protected.
     return this.usersService.create(createUserDto);
   }
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOneById(+id);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: any) {
+    return this.usersService.update(+id, updateUserDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(+id);
+  }
 }
+

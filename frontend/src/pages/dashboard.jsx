@@ -1,26 +1,98 @@
 import React from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 const Dashboard = () => {
-    const { logout } = useAuth();
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 p-4">
-            <Card className="w-full max-w-md shadow-xl border-t-4 border-indigo-500">
-                <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold text-gray-800">Dashboard</CardTitle>
-                    <CardDescription>You are successfully logged in.</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center gap-4 p-6">
-                    <div className="p-4 bg-indigo-50 text-indigo-700 rounded-lg w-full text-center font-medium">
-                        Welcome to your ERP System
-                    </div>
-                     <Button variant="destructive" onClick={logout} className="w-full sm:w-auto">
-                        Logout
-                    </Button>
-                </CardContent>
-            </Card>
+        <div className="space-y-6">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">
+                            Total Revenue
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">$45,231.89</div>
+                        <p className="text-xs text-muted-foreground">
+                            +20.1% from last month
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                         <CardTitle className="text-sm font-medium">
+                            Active Users
+                        </CardTitle>
+                    </CardHeader>
+                     <CardContent>
+                        <div className="text-2xl font-bold">+2350</div>
+                        <p className="text-xs text-muted-foreground">
+                            +180.1% from last month
+                        </p>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                         <CardTitle className="text-sm font-medium">
+                            Sales
+                        </CardTitle>
+                    </CardHeader>
+                     <CardContent>
+                        <div className="text-2xl font-bold">+12,234</div>
+                        <p className="text-xs text-muted-foreground">
+                            +19% from last month
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                         <CardTitle className="text-sm font-medium">
+                            Active Now
+                        </CardTitle>
+                    </CardHeader>
+                     <CardContent>
+                        <div className="text-2xl font-bold">+573</div>
+                        <p className="text-xs text-muted-foreground">
+                            +201 since last hour
+                        </p>
+                    </CardContent>
+                </Card>
+            </div>
+            
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-4">
+                     <CardHeader>
+                        <CardTitle>Overview</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pl-2">
+                        <div className="flex items-center justify-center h-[300px] text-gray-400">
+                            Graph Placeholder
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card className="col-span-3">
+                    <CardHeader>
+                        <CardTitle>Recent Sales</CardTitle>
+                        <CardDescription>
+                            You made 265 sales this month.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                         <div className="space-y-8">
+                            <div className="flex items-center">
+                                <div className="ml-4 space-y-1">
+                                    <p className="text-sm font-medium leading-none">Olivia Martin</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        olivia.martin@email.com
+                                    </p>
+                                </div>
+                                <div className="ml-auto font-medium">+$1,999.00</div>
+                            </div>
+                         </div>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }

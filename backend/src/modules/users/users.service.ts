@@ -19,12 +19,35 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { username } });
   }
 
+  async findOneById(id: number): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { id } });
+  }
+
   async findOneWithPassword(username: string): Promise<User | null> {
     return this.usersRepository.findOne({ 
       where: { username },
-      select: ['id', 'username', 'password', 'role', 'name'] // Explicitly select password
-      // Alternatively use query builder to addSelect, but simple select works if we list all needed fields.
-      // Better: use addSelect if we want all + password.
+      select: ['id', 'username', 'password', 'role', 'name']
     });
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
+  async update(id: number, attrs: Partial<User>): Promise<User> {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    Object.assign(user, attrs);
+    return this.usersRepository.save(user);
+  }
+
+  async remove(id: number): Promise<User> {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return this.usersRepository.remove(user);
   }
 }
