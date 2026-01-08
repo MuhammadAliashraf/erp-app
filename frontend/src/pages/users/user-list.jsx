@@ -227,6 +227,7 @@ const UserList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentUser ? 'Edit User' : 'Add New User'}
+        maxWidth="max-w-md"
       >
         <UserForm 
           user={currentUser} 

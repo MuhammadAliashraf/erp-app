@@ -210,6 +210,7 @@ const CategoryList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentCategory ? 'Edit Category' : 'Add New Category'}
+        maxWidth="max-w-md"
       >
         <CategoryForm 
           category={currentCategory} 

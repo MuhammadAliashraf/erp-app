@@ -295,6 +295,7 @@ const PurchaseOrderDetail = () => {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         title="Edit Purchase Order"
+        maxWidth="max-w-4xl"
       >
         <PurchaseOrderForm 
           order={order}

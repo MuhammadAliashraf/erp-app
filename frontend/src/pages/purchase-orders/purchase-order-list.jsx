@@ -181,6 +181,7 @@ const PurchaseOrderList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Create Purchase Order"
+        maxWidth="max-w-4xl"
       >
         <PurchaseOrderForm 
           onSubmit={handleSubmit} 

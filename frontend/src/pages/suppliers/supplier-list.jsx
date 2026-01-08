@@ -223,6 +223,7 @@ const SupplierList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentSupplier ? 'Edit Supplier' : 'Add New Supplier'}
+        maxWidth="max-w-2xl"
       >
         <SupplierForm 
           supplier={currentSupplier} 

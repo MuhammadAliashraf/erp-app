@@ -231,6 +231,7 @@ const ProductList = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={currentProduct ? 'Edit Product' : 'Add New Product'}
+        maxWidth="max-w-2xl"
       >
         <ProductForm 
           product={currentProduct} 
