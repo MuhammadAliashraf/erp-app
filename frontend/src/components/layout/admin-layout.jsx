@@ -9,7 +9,8 @@ import {
   X,
   Package,
   Layers,
-  Truck
+  Truck,
+  ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ const AdminLayout = () => {
     { icon: Package, label: 'Inventory', path: '/products' },
     { icon: Layers, label: 'Categories', path: '/categories' },
     { icon: Truck, label: 'Suppliers', path: '/suppliers' },
+    { icon: ClipboardList, label: 'Purchase Orders', path: '/purchase-orders' },
   ];
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);

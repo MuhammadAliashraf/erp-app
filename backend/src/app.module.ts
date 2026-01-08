@@ -8,6 +8,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { SuppliersModule } from './modules/suppliers/suppliers.module';
+import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
 
 @Module({
   imports: [
@@ -29,11 +30,11 @@ import { SuppliersModule } from './modules/suppliers/suppliers.module';
       inject: [ConfigService],
     }),
     AuthModule,
-    AuthModule,
     UsersModule,
     ProductsModule,
     CategoriesModule,
     SuppliersModule,
+    PurchaseOrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
