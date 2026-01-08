@@ -35,6 +35,7 @@ import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.
     CategoriesModule,
     SuppliersModule,
     PurchaseOrdersModule,
+    GrnModule,
   ],
   controllers: [AppController],
   providers: [AppService],

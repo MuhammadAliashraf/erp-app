@@ -11,6 +11,8 @@ import CategoryList from './pages/categories/category-list';
 import SupplierList from './pages/suppliers/supplier-list';
 import PurchaseOrderList from './pages/purchase-orders/purchase-order-list';
 import PurchaseOrderDetail from './pages/purchase-orders/purchase-order-detail';
+import GrnList from './components/grn/grn-list';
+import GrnForm from './components/grn/grn-form';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -43,6 +45,8 @@ function App() {
             <Route path="suppliers" element={<SupplierList />} />
             <Route path="purchase-orders" element={<PurchaseOrderList />} />
             <Route path="purchase-orders/:id" element={<PurchaseOrderDetail />} />
+            <Route path="grn" element={<GrnList />} />
+            <Route path="grn/create" element={<GrnForm />} />
           </Route>
         </Routes>
       </Router>
