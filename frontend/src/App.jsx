@@ -6,6 +6,7 @@ import Register from './pages/auth/register';
 import Dashboard from './pages/dashboard';
 import AdminLayout from './components/layout/admin-layout';
 import UserList from './pages/users/user-list';
+import ProductList from './pages/products/product-list';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -33,6 +34,7 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="users" element={<UserList />} />
+            <Route path="products" element={<ProductList />} />
           </Route>
         </Routes>
       </Router>

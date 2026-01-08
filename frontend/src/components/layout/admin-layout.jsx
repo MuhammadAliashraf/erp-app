@@ -6,7 +6,8 @@ import {
   Settings, 
   LogOut, 
   Menu, 
-  X
+  X,
+  Package
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ const AdminLayout = () => {
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { icon: Users, label: 'Users', path: '/users' },
+    { icon: Package, label: 'Inventory', path: '/products' },
   ];
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
